@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.farmatodo.rtlogsenderdaemon</groupId>
+	<artifactId>rtlog-sender-daemon</artifactId>
+	<version>1.0</version>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.7.RELEASE</version>
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.7</java.version>
+		<compiler.plugin>3.3</compiler.plugin>
+		<jar.plugin>2.6</jar.plugin>
+		<shade.plugin>2.3</shade.plugin>
+		<dependency.plugin>2.10</dependency.plugin>
+		<launch4j.plugin>1.7.5</launch4j.plugin>
+		<log4j.version>1.2.17</log4j.version>
+		<jdom.version>1.1</jdom.version>
+	</properties>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.transaction</groupId>
+			<artifactId>jta</artifactId>
+			<version>1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.jms</groupId>
+			<artifactId>javax.jms-api</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>aqapi</artifactId>
+			<version>12.1.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc7</artifactId>
+			<version>12.1.0.2</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.apache.maven.plugins</groupId> -->
+<!-- 				<artifactId>maven-shade-plugin</artifactId> -->
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<phase>package</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>shade</goal> -->
+<!-- 						</goals> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+<!-- 				<configuration> -->
+<!-- 					<transformers> -->
+<!-- 						<transformer -->
+<!-- 							implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"> -->
+<!-- 							<mainClass>com.farmatodo.rtlogsenderdaemon.Application</mainClass> -->
+<!-- 						</transformer> -->
+<!-- 					</transformers> -->
+<!-- 					<filters> -->
+<!-- 						<filter> -->
+<!-- 							<artifact>*:*</artifact> -->
+<!-- 							<excludes> -->
+<!-- 								<exclude>META-INF/*.SF</exclude> -->
+<!-- 								<exclude>META-INF/*.DSA</exclude> -->
+<!-- 								<exclude>META-INF/*.RSA</exclude> -->
+<!-- 								<exclude>META-INF/*.EC</exclude> -->
+<!-- 							</excludes> -->
+<!-- 						</filter> -->
+<!-- 					</filters> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
+
+			<plugin>
+				<groupId>com.akathist.maven.plugins.launch4j</groupId>
+				<artifactId>launch4j-maven-plugin</artifactId>
+				<version>${launch4j.plugin}</version>
+				<executions>
+					<execution>
+						<id>l4j-clui</id>
+						<phase>package</phase>
+						<goals>
+							<goal>launch4j</goal>
+						</goals>
+						<configuration>
+
+							<!--indicar gui (javaw) o console (java) -->
+							<headerType>console</headerType>
+							<outfile>${project.build.directory}/rtlogDaemon.exe</outfile>
+
+							<icon>src/main/resources/files/farmatodo.ico</icon>
+							<!-- impide ejecutar más de una instancia a la vez -->
+							<singleInstance>
+								<mutexName>rtlogDaemon</mutexName>
+							</singleInstance>
+
+							<jre><!-- versión mínima requerida de java -->
+								<minVersion>${java.version}.0</minVersion>
+							</jre>
+
+							<versionInfo>
+								<fileVersion>1.0.0.0</fileVersion>
+								<txtFileVersion>versión 1.0</txtFileVersion>
+								<fileDescription>demo de launch4j</fileDescription>
+								<copyright>farmatodo.com</copyright>
+								<productVersion>1.0.0.0</productVersion>
+								<txtProductVersion>demo de launch4j</txtProductVersion>
+								<productName>demo de launch4j</productName>
+								<internalName>orposInstaller</internalName>
+								<originalFilename>orposInstaller.exe</originalFilename>
+							</versionInfo>
+
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>
